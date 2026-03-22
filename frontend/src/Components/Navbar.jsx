@@ -3,7 +3,7 @@ import styles from "./Navbar.module.css"
 
 function Navbar() {
   return (
-    <div className={styles.mainContainer}>Navbar</div>
+    <div className={styles.NavContainer}>Navbar</div>
   )
 }
 
