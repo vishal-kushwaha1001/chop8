@@ -2,10 +2,12 @@
 /* Rightnav.module.css */
 
 .actions {
+  order: 2;
+}
+.actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  order: 2;
+  gap: 15px;
 }
 
 /* Login Button */
@@ -69,4 +71,36 @@
 
 .icon {
   font-size: 18px;
+}
+
+
+/* hambarger */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px;
+}
+
+/* lines */
+.hamburger span {
+  width: 28px;
+  height: 5px;
+  background: white; /* match navbar */
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+/* animation */
+.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }

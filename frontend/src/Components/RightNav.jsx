@@ -1,30 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./css/Rightnav.module.css";
 import { Link } from "react-router";
-import { FaUserCircle } from "react-icons/fa"; 
+import { FaBars, FaUserCircle } from "react-icons/fa";
+import Sidebar from "./Sidebar.jsx";
 
-function RightNav({ isLoggedIn = false }) {
+function RightNav({ isLoggedIn = false}) {
+
+
+    const [open, setOpen] = useState(false);
+
     return (
         <>
 
-            {isLoggedIn ? (
-                <div className={styles.actions}>
-                    <Link to="/profile" className={styles.profileBtn}>
-                       <FaUserCircle className={styles.icon} /> Profile
-                    </Link>
-                </div>
-            ) : (
-                <div className={styles.actions}>
-                    <Link to="/login" className={styles.loginBtn}>
-                        LogIn
-                    </Link>
-                    <Link to="/signup" className={styles.startBtn}>
-                        Get started
-                    </Link>
 
-                </div>
-            )}
-        </>
+
+            {/*  */}
+            <div className={styles.actions}>
+                {isLoggedIn ? (
+          <Link to="/profile" className={styles.profileBtn}>
+                <FaUserCircle className={styles.icon} /> Profile
+            </Link>
+            ) : (
+            <>
+                <Link to="/login" className={styles.loginBtn}>
+                    Log in
+                </Link>
+                <Link to="/signup" className={styles.startBtn}>
+                    Get started
+                </Link>
+            </>
+        )}
+
+            {/* Custom Hamburger */}
+            <div
+                className={`${styles.hamburger} ${open ? styles.active : ""}`}
+                onClick={() => setOpen(!open)}
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div >
+
+            {/* Sidebar */ }
+            < Sidebar open = { open } setOpen = { setOpen } />
+    </>
+
+        
     );
 }
 

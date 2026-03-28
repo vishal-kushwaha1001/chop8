@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./Routes/App";
 import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
-import Services from "./pages/Servives.jsx";
+import Services from "./pages/Services.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import About from "./pages/About.jsx";
 import Profile from "./pages/Profile.jsx";
@@ -21,6 +21,7 @@ const router = createBrowserRouter(
       <Route path="/about" element={<About />} />
       <Route path="/orders" element={<Orders />} />
       <Route path="/profile" element={<Profile/>} />
+      {/* <Route path="*" element={<h1>path not found</h1>} /> */}
     </Route>
   )
 );
