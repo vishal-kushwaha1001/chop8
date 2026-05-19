@@ -1,0 +1,592 @@
+/* src/pages/Styles/RecommendedChefs.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes barGrow {
+  from { width: 0%; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -700px 0; }
+  100% { background-position:  700px 0; }
+}
+
+@keyframes pulseGreen {
+  0%,100% { box-shadow: 0 0 0 0   rgba(74, 222, 128, 0.5); }
+  50%      { box-shadow: 0 0 0 7px rgba(74, 222, 128, 0);   }
+}
+
+@keyframes pulseBlue {
+  0%,100% { box-shadow: 0 0 0 0   rgba(38, 160, 218, 0.5); }
+  50%      { box-shadow: 0 0 0 7px rgba(38, 160, 218, 0);   }
+}
+
+/* ── Page Root ───────────────────────────────────────────── */
+.page {
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 64px;
+}
+
+/* ── Page Header ─────────────────────────────────────────── */
+.pageHeader {
+  background: linear-gradient(135deg, #162032 0%, #1e293b 100%);
+  border-bottom: 1px solid #334155;
+  padding: 32px 40px 26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.pageTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 2px;
+  color: #f8fafc;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.pageTitle span {
+  color: #fbbf24;
+}
+
+.pageSubtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.mlBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.mlDot {
+  width: 6px;
+  height: 6px;
+  background: #4ade80;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulseGreen 1.8s infinite;
+}
+
+.retryBtn {
+  background: rgba(38, 160, 218, 0.12);
+  border: 1px solid rgba(38, 160, 218, 0.3);
+  color: #7dd3fc;
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.retryBtn:hover {
+  background: rgba(38, 160, 218, 0.22);
+}
+
+/* ── Fallback Warning ────────────────────────────────────── */
+.fallbackBanner {
+  margin: 20px 40px 0;
+  background: rgba(251, 191, 36, 0.08);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 10px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.fallbackIcon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+
+.fallbackText {
+  font-size: 13px;
+  color: #fbbf24;
+  line-height: 1.55;
+}
+
+.fallbackText strong {
+  color: #fde68a;
+}
+
+.fallbackText code {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ── Column Headers ──────────────────────────────────────── */
+.colHeaders {
+  display: grid;
+  grid-template-columns: 50px 1fr 70px;
+  gap: 0 12px;
+  padding: 16px 40px 8px;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.colRight {
+  text-align: right;
+}
+
+/* ── Chef List ───────────────────────────────────────────── */
+.list {
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: fadeUp 0.3s ease;
+}
+
+/* ── Chef Row ────────────────────────────────────────────── */
+.row {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: grid;
+  grid-template-columns: 50px 1fr 70px;
+  gap: 0 14px;
+  align-items: start;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+
+.row:hover {
+  border-color: #26a0da;
+  background: #1a2d42;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.rowOpen {
+  border-color: #26a0da;
+  background: #162032;
+  border-radius: 14px 14px 0 0;
+  border-bottom-color: transparent;
+  transform: none;
+  box-shadow: 0 4px 20px rgba(38, 160, 218, 0.15);
+}
+
+.rowOpen:hover {
+  transform: none;
+}
+
+/* ── Rank Badge ──────────────────────────────────────────── */
+.rankBadge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.rankGold   { background: linear-gradient(135deg, #f7971e, #ffd200); color: #7a3f00; box-shadow: 0 3px 10px rgba(255, 210, 0, 0.3); }
+.rankSilver { background: linear-gradient(135deg, #9ca3af, #e5e7eb); color: #1f2937; }
+.rankBronze { background: linear-gradient(135deg, #cd7f32, #e8a87c); color: #4a2200; }
+.rankOther  { background: #0f172a; color: #64748b; border: 1px solid #334155; }
+
+.rankEmoji {
+  font-size: 22px;
+  line-height: 1;
+}
+
+/* ── Chef Info ───────────────────────────────────────────── */
+.info { min-width: 0; }
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+
+.chefName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #f8fafc;
+}
+
+/* Label pills */
+.pill {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.pillHighly  { background: rgba(74,222,128,0.12); color: #4ade80; border: 0.5px solid rgba(74,222,128,0.3); }
+.pillRec     { background: rgba(38,160,218,0.12); color: #7dd3fc; border: 0.5px solid rgba(38,160,218,0.3); }
+.pillGood    { background: rgba(251,191,36,0.12); color: #fbbf24; border: 0.5px solid rgba(251,191,36,0.3); }
+.pillAvg     { background: rgba(248,113,113,0.1); color: #f87171; border: 0.5px solid rgba(248,113,113,0.25); }
+.pillUnrated { background: rgba(100,116,139,0.1); color: #64748b; border: 0.5px solid #334155; }
+
+.specPill {
+  background: rgba(38,160,218,0.1);
+  color: #7dd3fc;
+  border: 0.5px solid rgba(38,160,218,0.25);
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Meta row — price + stars */
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.price {
+  font-size: 13px;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.priceUnit {
+  color: #475569;
+  font-weight: 400;
+}
+
+.starsWrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.starsOn  { color: #fbbf24; letter-spacing: 1px; }
+.starsOff { color: #334155; letter-spacing: 1px; }
+
+.ratingText {
+  font-size: 11px;
+  color: #475569;
+}
+
+/* ── Score Bar ───────────────────────────────────────────── */
+.scoreBarWrap {
+  margin-top: 6px;
+}
+
+.scoreBarLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #475569;
+  margin-bottom: 4px;
+}
+
+.scoreBarValue {
+  font-weight: 700;
+}
+
+.scoreBarTrack {
+  background: #0f172a;
+  border-radius: 6px;
+  height: 5px;
+  overflow: hidden;
+  border: 1px solid #1e293b;
+}
+
+.scoreBarFill {
+  height: 100%;
+  border-radius: 6px;
+  animation: barGrow 1s ease;
+}
+
+.fillHigh   { background: linear-gradient(90deg, #4ade80, #22c55e); }
+.fillMid    { background: linear-gradient(90deg, #26a0da, #38bdf8); }
+.fillLow    { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.fillRed    { background: linear-gradient(90deg, #f87171, #ef4444); }
+
+/* ── Sentiment Chips ─────────────────────────────────────── */
+.sentimentRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 7px;
+}
+
+.sentChip {
+  padding: 2px 10px;
+  border-radius: 18px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sentPos  { background: rgba(74,222,128,0.1);  color: #4ade80; border: 0.5px solid rgba(74,222,128,0.25); }
+.sentNeut { background: rgba(100,116,139,0.12); color: #94a3b8; border: 0.5px solid #334155; }
+.sentNeg  { background: rgba(248,113,113,0.1); color: #f87171; border: 0.5px solid rgba(248,113,113,0.25); }
+.sentNone { font-size: 11px; color: #475569; font-style: italic; }
+
+/* Click hint */
+.clickHint {
+  font-size: 11px;
+  color: #475569;
+  margin-top: 6px;
+}
+
+/* ── Score Number (right col) ────────────────────────────── */
+.scoreCol {
+  text-align: right;
+  padding-top: 2px;
+}
+
+.scoreNum {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: #26a0da;
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.scoreMax {
+  font-size: 10px;
+  color: #475569;
+  margin-top: 2px;
+}
+
+/* ── Booking Panel (accordion below row) ─────────────────── */
+.bookingPanel {
+  background: #162032;
+  border: 1px solid #26a0da;
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  padding: 0 20px 20px;
+  animation: fadeUp 0.2s ease;
+}
+
+.busyMsg {
+  padding: 22px 0 10px;
+  text-align: center;
+  color: #f87171;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.alreadyMsg {
+  padding: 22px 0 10px;
+  text-align: center;
+  color: #4ade80;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.closeBtn {
+  margin-top: 12px;
+  padding: 9px 24px;
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: #26a0da;
+  color: #fff;
+  border-color: #26a0da;
+}
+
+/* ── Loading ─────────────────────────────────────────────── */
+.loadingWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 0;
+  gap: 16px;
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid #1e293b;
+  border-top: 3px solid #26a0da;
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+}
+
+.loadingText {
+  font-size: 13px;
+  color: #475569;
+}
+
+/* ── Error ───────────────────────────────────────────────── */
+.errorBox {
+  margin: 32px 40px;
+  background: rgba(248, 113, 113, 0.08);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  border-radius: 12px;
+  padding: 22px 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.errorIcon { font-size: 24px; flex-shrink: 0; }
+
+.errorText {
+  flex: 1;
+  font-size: 13px;
+  color: #f87171;
+  line-height: 1.6;
+}
+
+.errorRetry {
+  padding: 9px 22px;
+  background: #f87171;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  flex-shrink: 0;
+  align-self: center;
+  transition: background 0.2s;
+}
+
+.errorRetry:hover {
+  background: #ef4444;
+}
+
+/* ── Empty State ─────────────────────────────────────────── */
+.emptyWrap {
+  margin: 40px 40px 0;
+  text-align: center;
+  padding: 60px 24px;
+  background: #1e293b;
+  border: 1px dashed #334155;
+  border-radius: 16px;
+}
+
+.emptyIcon {
+  font-size: 52px;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.emptyTitle {
+  font-size: 17px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.emptyDesc {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.debugLink {
+  font-size: 12px;
+  color: #26a0da;
+  text-decoration: none;
+}
+
+.debugLink:hover {
+  color: #7dd3fc;
+}
+
+.debugDetails {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 11px;
+  color: #475569;
+}
+
+.debugDetails summary {
+  cursor: pointer;
+  color: #64748b;
+}
+
+.debugPre {
+  background: #0f172a;
+  border: 1px solid #334155;
+  padding: 12px;
+  border-radius: 8px;
+  overflow: auto;
+  margin-top: 8px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ── Skeleton ────────────────────────────────────────────── */
+.skeletonList {
+  padding: 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton {
+  height: 100px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #1e293b 25%, #263348 50%, #1e293b 75%);
+  background-size: 700px 100%;
+  animation: shimmer 1.4s infinite linear;
+}

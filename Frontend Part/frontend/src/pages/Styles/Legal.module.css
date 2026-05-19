@@ -1,0 +1,40 @@
+.page {
+  background: #0f172a;
+  min-height: 100vh;
+  color: #f8fafc;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 50px 20px;
+}
+
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  color: #26a0da;
+  margin-bottom: 10px;
+}
+
+.date {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+section {
+  margin-bottom: 25px;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 8px;
+  color: #38bdf8;
+}
+
+p {
+  font-size: 14px;
+  color: #cbd5f5;
+  line-height: 1.6;
+}

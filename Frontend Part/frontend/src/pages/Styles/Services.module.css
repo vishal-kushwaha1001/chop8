@@ -1,0 +1,554 @@
+
+/* src/pages/Styles/Services.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@keyframes bd {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+@keyframes floatEmoji {
+  0%, 100% { transform: translateY(-50%) rotate(-3deg); }
+  50%       { transform: translateY(calc(-50% - 12px)) rotate(3deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══ Page Root ═══════════════════════════════════════════ */
+.page {
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ══ HERO BANNER ════════════════════════════════════════ */
+.heroBanner {
+  position: relative;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+  border-bottom: 1px solid #1e293b;
+  padding: 44px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  min-height: 200px;
+}
+
+.heroBanner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(38, 160, 218, 0.10) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.heroBannerContent {
+  position: relative;
+  z-index: 1;
+  max-width: 500px;
+}
+
+.heroBannerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(38, 160, 218, 0.12);
+  border: 1px solid rgba(38, 160, 218, 0.30);
+  color: #7dd3fc;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.bdot {
+  width: 7px;
+  height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bd 1.6s infinite;
+}
+
+.heroBannerTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 54px;
+  line-height: 0.95;
+  letter-spacing: 2px;
+  color: #f8fafc;
+  margin: 0 0 12px;
+}
+
+.accent {
+  color: #26a0da;
+}
+
+.heroBannerDesc {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 380px;
+}
+
+.heroBannerEmoji {
+  font-size: 130px;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  animation: floatEmoji 4s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+  margin-left: 40px;
+}
+
+/* ══ SEARCH SECTION ══════════════════════════════════════ */
+.searchSection {
+  padding: 24px 36px 8px;
+}
+
+.searchWrap {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 44px 13px 46px;
+  border-radius: 14px;
+  border: 1.5px solid #334155;
+  background: #1e293b;
+  color: #f8fafc;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchInput::placeholder {
+  color: #475569;
+}
+
+.searchInput:focus {
+  border-color: #26a0da;
+  box-shadow: 0 0 0 3px rgba(38, 160, 218, 0.12);
+}
+
+.searchClear {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.searchClear:hover {
+  color: #94a3b8;
+}
+
+/* ══ FILTER PILLS ════════════════════════════════════════ */
+.filterSection {
+  padding: 14px 36px 0;
+}
+
+.filterRow {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: none;
+}
+
+.filterRow::-webkit-scrollbar {
+  display: none;
+}
+
+.filterPill {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: 24px;
+  border: 1px solid #334155;
+  background: #1e293b;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.filterPill:hover {
+  border-color: #26a0da;
+  color: #7dd3fc;
+  background: rgba(38, 160, 218, 0.08);
+}
+
+.filterPillActive {
+  background: rgba(38, 160, 218, 0.15);
+  border-color: #26a0da;
+  color: #7dd3fc;
+}
+
+/* ══ RESULTS HEADER ══════════════════════════════════════ */
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 36px 10px;
+}
+
+.resultsCount {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.resultsFilter {
+  color: #7dd3fc;
+}
+
+.clearFilterBtn {
+  background: none;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 12px;
+  color: #64748b;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.clearFilterBtn:hover {
+  border-color: #475569;
+  color: #94a3b8;
+}
+
+/* ══ CHEF GRID SECTION ═══════════════════════════════════ */
+.gridSection {
+  padding: 10px 36px 40px;
+}
+
+.chefGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: flex-start;
+}
+
+.chefCardWrap {
+  position: relative;
+  flex-shrink: 0;
+  animation: fadeUp 0.4s ease both;
+}
+
+/* Status badge */
+.statusBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.badgeAvail {
+  background: rgba(74, 222, 128, 0.12);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+.badgeAvail .statusDot {
+  background: #4ade80;
+  animation: pulse 1.8s infinite;
+}
+
+.badgeBusy {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: #38bdf8;
+}
+
+.badgeBusy .statusDot {
+  background: #38bdf8;
+  animation: pulse 1.8s infinite;
+}
+
+.badgeOff {
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.badgeOff .statusDot {
+  background: #f87171;
+}
+
+.bookedBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: rgba(167, 139, 250, 0.15);
+  border: 1px solid rgba(167, 139, 250, 0.35);
+  color: #a78bfa;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.bookingFormWrap {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* ══ SKELETON LOADING ════════════════════════════════════ */
+.loadingWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.skeletonCard {
+  width: 220px;
+  min-height: 280px;
+  border-radius: 16px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  padding: 24px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.skeletonAvatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #1e293b 25%, #273449 50%, #1e293b 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.skeletonLine {
+  height: 12px;
+  border-radius: 6px;
+  align-self: stretch;
+  background: linear-gradient(90deg, #1e293b 25%, #273449 50%, #1e293b 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.skeletonBtn {
+  width: 100%;
+  height: 38px;
+  border-radius: 10px;
+  margin-top: auto;
+  background: linear-gradient(90deg, #1e293b 25%, #273449 50%, #1e293b 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* ══ EMPTY STATE ═════════════════════════════════════════ */
+.emptyState {
+  text-align: center;
+  padding: 80px 20px;
+  width: 100%;
+}
+
+.emptyIcon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  display: block;
+  opacity: 0.5;
+}
+
+.emptyH {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  margin: 0 0 8px;
+}
+
+.emptyP {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 20px;
+}
+
+.emptyBtn {
+  background: #26a0da;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.emptyBtn:hover {
+  background: #1976d2;
+}
+
+/* ══ INFO STRIP ══════════════════════════════════════════ */
+.infoStrip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 0 36px 40px;
+  border-top: 1px solid #1e293b;
+  padding-top: 28px;
+}
+
+.infoChip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.infoChipIcon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.infoChipLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 2px;
+}
+
+.infoChipSub {
+  font-size: 11px;
+  color: #64748b;
+}
+
+/* ══ GATE (login/role) ═══════════════════════════════════ */
+.gateWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 40px 20px;
+}
+
+.gateCard {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 48px 36px;
+  text-align: center;
+  max-width: 380px;
+  width: 100%;
+}
+
+.gateIcon {
+  font-size: 52px;
+  margin-bottom: 16px;
+}
+
+.gateH {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  margin: 0 0 10px;
+}
+
+.gateP {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+
+.gateBtn {
+  display: inline-block;
+  background: #26a0da;
+  color: #fff;
+  padding: 11px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.gateBtn:hover {
+  background: #1976d2;
+}
+
+.gateBtnYellow {
+  display: inline-block;
+  background: #fbbf24;
+  color: #3e2000;
+  padding: 11px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.gateBtnYellow:hover {
+  background: #f59e0b;
+}
+
+/* ══ Pulse keyframe (used in inline style) ═══════════════ */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(74,222,128,0.55); }
+  70%  { box-shadow: 0 0 0 7px rgba(74,222,128,0); }
+  100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+}

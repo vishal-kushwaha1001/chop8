@@ -1,0 +1,589 @@
+/* src/pages/Styles/ChefOrders.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+/* ── Keyframes ───────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -700px 0; }
+  100% { background-position:  700px 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(74, 222, 128, 0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);   }
+}
+
+@keyframes pulseRed {
+  0%, 100% { box-shadow: 0 0 0 0   rgba(248, 113, 113, 0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(248, 113, 113, 0);   }
+}
+
+/* ── Page Root ───────────────────────────────────────────── */
+.page {
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding-bottom: 64px;
+}
+
+/* ── Page Header ─────────────────────────────────────────── */
+.pageHeader {
+  background: linear-gradient(135deg, #162032 0%, #1e293b 100%);
+  border-bottom: 1px solid #334155;
+  padding: 28px 40px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.headerLeft {}
+
+.pageTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 34px;
+  letter-spacing: 2px;
+  color: #f8fafc;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.pageTitle span {
+  color: #26a0da;
+}
+
+.pageSubtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* ── Availability Toggle ─────────────────────────────────── */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.statusAvailable {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+}
+
+.statusUnavailable {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.dotGreen { background: #4ade80; animation: pulseGreen 1.8s infinite; }
+.dotRed   { background: #f87171; animation: pulseRed   1.8s infinite; }
+
+.toggleBtn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.toggleBtnOn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.toggleBtnOn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.toggleBtnOff {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(34, 197, 94, 0.3);
+}
+
+.toggleBtnOff:hover:not(:disabled) {
+  background: linear-gradient(135deg, #16a34a, #15803d);
+}
+
+.toggleBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Stats Row ───────────────────────────────────────────── */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 20px 40px 0;
+}
+
+.statCard {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.statIcon {
+  font-size: 26px;
+  flex-shrink: 0;
+}
+
+.statNum {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: #26a0da;
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* ── Section ─────────────────────────────────────────────── */
+.section {
+  padding: 24px 40px 0;
+  animation: fadeUp 0.3s ease;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.sectionTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+}
+
+.sectionCount {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #64748b;
+  padding: 2px 9px;
+  border-radius: 18px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sectionCountActive    { border-color: rgba(38,160,218,0.3);  color: #7dd3fc; background: rgba(38,160,218,0.08); }
+.sectionCountCancelled { border-color: rgba(248,113,113,0.3); color: #f87171; background: rgba(248,113,113,0.08); }
+.sectionCountPast      { border-color: rgba(100,116,139,0.3); color: #94a3b8; background: rgba(100,116,139,0.08); }
+
+.sectionList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Empty State ─────────────────────────────────────────── */
+.emptyMsg {
+  font-size: 13px;
+  color: #475569;
+  font-style: italic;
+  padding: 18px 0;
+  text-align: center;
+}
+
+/* ── Booking Card ────────────────────────────────────────── */
+.card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 18px 20px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: #475569;
+}
+
+.cardExpired {
+  opacity: 0.72;
+  filter: grayscale(20%);
+}
+
+.cardCancelled {
+  opacity: 0.72;
+  filter: grayscale(30%);
+}
+
+/* ── Token Badge (top-right of card) ────────────────────── */
+.tokenBadge {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  color: #fff;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tokenCOD       { background: linear-gradient(135deg, #16a34a, #22c55e); }
+.tokenConfirmed { background: linear-gradient(135deg, #f7971e, #ffd200); color: #3e2000 !important; }
+.tokenPending   { background: linear-gradient(135deg, #ef4444, #f87171); }
+.tokenEmergency { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+.tokenExpired   { background: #334155; }
+.tokenCancelled { background: #475569; }
+
+/* ── Card body layout ────────────────────────────────────── */
+.cardBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-right: 160px;   /* room for token badge */
+}
+
+.fieldGroup {}
+
+.fieldLabel {
+  font-size: 10px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.fieldValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.fieldSub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+/* ── Status pill inside card ─────────────────────────────── */
+.statusPill {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.pillConfirmed  { background: rgba(74,222,128,0.12);  color: #4ade80; border: 0.5px solid rgba(74,222,128,0.25); }
+.pillPending    { background: rgba(251,191,36,0.12);  color: #fbbf24; border: 0.5px solid rgba(251,191,36,0.25); }
+.pillExpired    { background: rgba(100,116,139,0.1);  color: #94a3b8; border: 0.5px solid #334155; }
+.pillCancelled  { background: rgba(248,113,113,0.1);  color: #f87171; border: 0.5px solid rgba(248,113,113,0.25); }
+
+/* ── Emergency badge ─────────────────────────────────────── */
+.emergencyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(185,28,28,0.2);
+  border: 1px solid rgba(248,113,113,0.3);
+  color: #f87171;
+  padding: 3px 10px;
+  border-radius: 18px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+/* ── Payment badges ──────────────────────────────────────── */
+.payGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.payBadgeWrap {}
+
+.payBadgeLabel {
+  font-size: 10px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+
+.payBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.payPaid { background: rgba(74,222,128,0.1);  color: #4ade80; border: 0.5px solid rgba(74,222,128,0.25); }
+.payCOD  { background: rgba(38,160,218,0.1);  color: #7dd3fc; border: 0.5px solid rgba(38,160,218,0.25); }
+.payPend { background: rgba(251,191,36,0.1);  color: #fbbf24; border: 0.5px solid rgba(251,191,36,0.25); }
+
+/* ── Price breakdown row ─────────────────────────────────── */
+.priceRow {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #162032;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  align-items: center;
+}
+
+.priceRowEmergency {
+  border-color: rgba(248,113,113,0.25);
+}
+
+.priceChip {
+  text-align: center;
+  padding: 4px 10px;
+  background: #1e293b;
+  border-radius: 8px;
+  border: 1px solid #334155;
+}
+
+.priceChipBold {
+  background: rgba(38,160,218,0.1);
+  border-color: rgba(38,160,218,0.25);
+}
+
+.priceChipLabel {
+  font-size: 9px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.priceChipValue {
+  font-size: 12px;
+  font-weight: 400;
+  color: #94a3b8;
+}
+
+.priceChipValueBold {
+  font-size: 14px;
+  font-weight: 700;
+  color: #26a0da;
+}
+
+/* ── Rate Button ─────────────────────────────────────────── */
+.rateBtn {
+  padding: 8px 18px;
+  background: linear-gradient(135deg, #f7971e, #ffd200);
+  color: #3e2000;
+  border: none;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+  box-shadow: 0 3px 10px rgba(247,151,30,0.25);
+}
+
+.rateBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(247,151,30,0.35);
+}
+
+.ratedLabel {
+  font-size: 12px;
+  color: #4ade80;
+  font-style: italic;
+}
+
+/* ── Penalty chip ────────────────────────────────────────── */
+.penaltyChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #f87171;
+  background: rgba(248,113,113,0.08);
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(248,113,113,0.2);
+}
+
+/* ── Watermark overlay ───────────────────────────────────── */
+.watermarkWrap {
+  position: relative;
+}
+
+.watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.watermarkText {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  font-weight: 900;
+  transform: rotate(-18deg);
+  letter-spacing: 6px;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.watermarkExpired   { color: rgba(100,116,139,0.12); }
+.watermarkCancelled { color: rgba(248,113,113,0.1); }
+
+/* ── Loading skeleton ────────────────────────────────────── */
+.skeletonList {
+  padding: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.skeleton {
+  height: 110px;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #1e293b 25%, #263348 50%, #1e293b 75%);
+  background-size: 700px 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+/* ── Guard screen ────────────────────────────────────────── */
+.guardWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 40px 20px;
+}
+
+.guardBox {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 18px;
+  padding: 48px 40px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.guardIcon {
+  font-size: 52px;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.guardBox h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  margin-bottom: 8px;
+}
+
+.guardBox p {
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+.guardBtnBlue {
+  display: inline-block;
+  padding: 11px 28px;
+  background: #26a0da;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+  box-shadow: 0 4px 14px rgba(38,160,218,0.3);
+}
+
+.guardBtnBlue:hover { background: #1976d2; }
+
+.guardBtnGold {
+  display: inline-block;
+  padding: 11px 28px;
+  background: #fbbf24;
+  color: #1a0a00;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.guardBtnGold:hover { background: #f59e0b; }

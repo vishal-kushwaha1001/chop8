@@ -1,0 +1,513 @@
+/* src/pages/Styles/Profile.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+/* ── Focus styles ───────────────────────────────────────── */
+/* applied via global style tag in jsx — kept here for reference */
+
+/* ── Page Root ──────────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  background: #0f172a;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px 60px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Card ───────────────────────────────────────────────── */
+.card {
+  background: #1e293b;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 660px;
+  border: 1px solid #334155;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Card Header ────────────────────────────────────────── */
+.cardHeader {
+  background: linear-gradient(135deg, #0c1a3a 0%, #0f2952 100%);
+  border-bottom: 1px solid #1d3a6e;
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cardHeaderTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 1.5px;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+
+.cardHeaderSub {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Role badge — chef variant */
+.roleBadgeChef {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Role badge — customer variant */
+.roleBadgeCustomer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(38, 160, 218, 0.12);
+  border: 1px solid rgba(38, 160, 218, 0.3);
+  color: #26a0da;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ── Card Body ──────────────────────────────────────────── */
+.cardBody {
+  padding: 28px;
+}
+
+/* ── Alerts ─────────────────────────────────────────────── */
+.alertError {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.alertSuccess {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  color: #4ade80;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+/* ── Loading ────────────────────────────────────────────── */
+.loading {
+  text-align: center;
+  color: #64748b;
+  padding: 40px 0;
+}
+
+/* ── Section Box (generic dark card) ───────────────────── */
+.sectionBox {
+  background: #162032;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+/* Section box with blue highlight (rating, preview) */
+.sectionBoxHighlight {
+  background: rgba(38, 160, 218, 0.06);
+  border: 1px solid rgba(38, 160, 218, 0.2);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+
+/* ── Rating Section ─────────────────────────────────────── */
+.ratingLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: #26a0da;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 10px;
+}
+
+/* Star display */
+.starRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.stars {
+  color: #fbbf24;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.starsEmpty {
+  color: #334155;
+}
+
+.ratingNum {
+  font-weight: 700;
+  font-size: 16px;
+  color: #f8fafc;
+}
+
+.ratingCount {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* ── Photo Section ──────────────────────────────────────── */
+.photoSection {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.avatarRing {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2.5px solid #26a0da;
+  box-shadow: 0 0 0 4px rgba(38, 160, 218, 0.12), 0 4px 16px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  font-size: 40px;
+}
+
+.photoControls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btnUpload {
+  padding: 8px 16px;
+  background: #26a0da;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.2s;
+}
+
+.btnUpload:hover {
+  background: #1976d2;
+}
+
+.btnRemove {
+  padding: 7px 16px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s;
+}
+
+.btnRemove:hover {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+.photoHint {
+  font-size: 11px;
+  color: #475569;
+  margin: 0;
+}
+
+/* ── Form Grid ──────────────────────────────────────────── */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.labelNote {
+  color: #334155;
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-left: 4px;
+}
+
+.input {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: #26a0da;
+  box-shadow: 0 0 0 3px rgba(38, 160, 218, 0.12);
+}
+
+.inputDisabled {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.textarea {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 14px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'DM Sans', sans-serif;
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.textarea:focus {
+  border-color: #26a0da;
+  box-shadow: 0 0 0 3px rgba(38, 160, 218, 0.12);
+}
+
+/* ── Specialisation Section ─────────────────────────────── */
+.specSection {
+  margin-bottom: 18px;
+}
+
+.specChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 10px;
+}
+
+.specChip {
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 1.5px solid #334155;
+  background: #0f172a;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+.specChip:hover {
+  border-color: #26a0da;
+  color: #7dd3fc;
+}
+
+.specChipActive {
+  padding: 5px 13px;
+  border-radius: 20px;
+  border: 1.5px solid #26a0da;
+  background: rgba(38, 160, 218, 0.12);
+  color: #26a0da;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s;
+}
+
+/* ── Chef Card Preview ──────────────────────────────────── */
+.previewLabel {
+  font-size: 11px;
+  color: #26a0da;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 10px;
+}
+
+.previewRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.previewSpec {
+  padding: 4px 14px;
+  background: rgba(38, 160, 218, 0.15);
+  color: #7dd3fc;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  border: 1px solid rgba(38, 160, 218, 0.25);
+}
+
+.previewPrice {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+/* ── Save Button Row ────────────────────────────────────── */
+.saveBtnRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btnSave {
+  padding: 12px 36px;
+  background: #26a0da;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 4px 16px rgba(38, 160, 218, 0.35);
+  transition: all 0.2s;
+}
+
+.btnSave:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(38, 160, 218, 0.45);
+}
+
+.btnSaveDisabled {
+  padding: 12px 36px;
+  background: #334155;
+  color: #64748b;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: not-allowed;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* ── Reviews Section ────────────────────────────────────── */
+.reviewsSection {
+  margin-top: 32px;
+}
+
+.reviewsTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 14px;
+  padding-top: 24px;
+  border-top: 1px solid #1e293b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.reviewsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reviewCard {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.reviewCardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 6px;
+}
+
+.reviewerName {
+  font-weight: 600;
+  font-size: 14px;
+  color: #f8fafc;
+}
+
+.reviewDate {
+  font-size: 11px;
+  color: #475569;
+  margin-left: 8px;
+}
+
+.reviewStars {
+  color: #fbbf24;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+.reviewComment {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0;
+}

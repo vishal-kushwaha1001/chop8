@@ -1,0 +1,336 @@
+/* src/pages/Styles/Payments.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+/* ── Keyframes ──────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+/* ── Page ───────────────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'DM Sans', sans-serif;
+  padding: 40px 24px 60px;
+}
+
+.inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ── Page Header ────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  animation: fadeInUp 0.45s ease both;
+}
+
+.pageTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: 2px;
+  color: #f8fafc;
+  margin: 0;
+}
+
+.btnBook {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: #26a0da;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 14px rgba(38, 160, 218, 0.3);
+}
+
+.btnBook:hover {
+  background: #1976d2;
+  transform: translateY(-1px);
+}
+
+.pageGreeting {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0 0 24px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.pageGreeting strong {
+  color: #94a3b8;
+}
+
+/* ── Summary Card ───────────────────────────────────────── */
+.summaryCard {
+  background: linear-gradient(135deg, #0c1a3a 0%, #0f2952 60%, #162032 100%);
+  border: 1px solid #1d3a6e;
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  animation: fadeInUp 0.5s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+.summaryCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% center, rgba(38, 160, 218, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.summaryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.summaryLabel {
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 600;
+}
+
+.summaryValue {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  color: #f8fafc;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.summaryValueBlue {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  color: #26a0da;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.summaryDivider {
+  width: 1px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Loading ────────────────────────────────────────────── */
+.loadingText {
+  font-size: 14px;
+  color: #475569;
+  padding: 40px 0;
+  text-align: center;
+}
+
+/* ── Empty / Message Box ────────────────────────────────── */
+.msgWrap {
+  padding: 60px 20px;
+  max-width: 480px;
+  margin: 0 auto;
+  animation: fadeInUp 0.5s ease both;
+}
+
+.msgBox {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  padding: 44px 32px;
+  text-align: center;
+}
+
+.msgIcon {
+  font-size: 52px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.msgTitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  margin: 0 0 8px;
+}
+
+.msgDesc {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+.btnMsgPrimary {
+  display: inline-block;
+  padding: 11px 26px;
+  background: #26a0da;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.btnMsgPrimary:hover {
+  background: #1976d2;
+}
+
+.btnMsgYellow {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 11px 28px;
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.28);
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btnMsgYellow:hover {
+  background: rgba(251, 191, 36, 0.2);
+}
+
+/* ── Payment List ───────────────────────────────────────── */
+.paymentList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* ── Payment Card ───────────────────────────────────────── */
+.payCard {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 22px 24px;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.payCard:hover {
+  border-color: #475569;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* Token badge */
+.tokenBadge {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  background: rgba(38, 160, 218, 0.12);
+  border: 1px solid rgba(38, 160, 218, 0.28);
+  color: #26a0da;
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Paid badge */
+.paidBadge {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: #4ade80;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Card body pushed below the badges */
+.payCardBody {
+  margin-top: 36px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+.payField {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.payFieldLabel {
+  font-size: 10px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: 700;
+}
+
+.payFieldValue {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.payFieldValueSmall {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.payDuration {
+  font-size: 11px;
+  color: #475569;
+  margin-top: 2px;
+}
+
+.payAmount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  color: #4ade80;
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+/* SMS confirmation strip */
+.smsStrip {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: rgba(74, 222, 128, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #4ade80;
+}
