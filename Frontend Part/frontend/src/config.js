@@ -1,5 +1,16 @@
 // src/config.js
-const BASE = "http://localhost:8080";
+//
+// FIX: API base URL is now dynamic.
+// When the frontend runs on localhost, it connects to localhost:8080.
+// When running on a LAN/server IP (e.g. 10.159.226.215), it connects
+// to the SAME host at port 8080 — so the backend is always reachable
+// without hardcoding any IP address.
+//
+// This means you never need to edit this file when deploying to a new
+// machine or sharing over a local network.
+//
+const _host = window.location.hostname;  // e.g. "localhost" or "10.159.226.215"
+const BASE   = `http://${_host}:8080`;
 
 export const API = {
   auth:      `${BASE}/api/auth`,
@@ -10,11 +21,11 @@ export const API = {
   payment:   `${BASE}/api/payment`,
   receipt:   `${BASE}/api/payment/receipt`,
   ratings:   `${BASE}/api/ratings`,
-  recommend: `${BASE}/api/recommend/chefs`,   // ← dedicated key, no string hacks needed
+  recommend: `${BASE}/api/recommend/chefs`,
 };
 
 // ── Payment & cancellation configuration ──────────────────
-// These values must match BookingService.java constants exactly
+// These values must match BookingService.js constants exactly
 export const PAYMENT = {
   PLATFORM_CHARGE:         49,
   GST_RATE:                0.03,

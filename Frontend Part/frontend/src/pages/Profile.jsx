@@ -1,10 +1,9 @@
 // src/pages/Profile.jsx
 import styles from "./Styles/Profile.module.css"
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { getUser, fetchProfile, saveProfile, updateLocalUser } from "../services/AuthService";
 import { API } from "../config";
 import { useNavigate } from "react-router";
-
 
 const SPECIALISATION_OPTIONS = [
   "Indian Chef", "Italian Chef", "Chinese Chef", "Mexican Chef",
@@ -34,9 +33,13 @@ function StarDisplay({ avg, count }) {
 
 /* ── Profile ─────────────────────────────────────────────── */
 function Profile() {
-  const navigate   = useNavigate();
-  const fileRef    = useRef(null);
-  const loggedUser = getUser();
+  const navigate = useNavigate();
+  const fileRef  = useRef(null);
+
+  // Read loggedUser once into a ref so it never triggers re-renders
+  // and is not affected by updateLocalUser mid-save.
+  const loggedUserRef = useRef(getUser());
+  const loggedUser    = loggedUserRef.current;
 
   const [form, setForm] = useState({
     name: "", mobile: "", address: "", pricePerDay: "", specialisation: "",
@@ -53,11 +56,19 @@ function Profile() {
 
   const isChef = loggedUser?.role === "chef";
 
+  // ── Load profile once on mount ─────────────────────────
   useEffect(() => {
-    if (!loggedUser) { navigate("/login"); return; }
+    // Guard: redirect only on mount if there truly is no session
+    if (!loggedUser) {
+      navigate("/login");
+      return;
+    }
+
+    let cancelled = false; // prevent state updates if component unmounts
 
     fetchProfile(loggedUser.role, loggedUser.userId)
       .then(data => {
+        if (cancelled) return;
         setForm({
           name:           data.name           || "",
           mobile:         data.mobile         || "",
@@ -65,28 +76,38 @@ function Profile() {
           pricePerDay:    data.pricePerDay != null ? String(data.pricePerDay) : "",
           specialisation: data.specialisation || "",
         });
-        setPhoto(data.photo    || "");
-        setPreview(data.photo  || "");
+        setPhoto(data.photo   || "");
+        setPreview(data.photo || "");
         setAvgRating(data.avgRating    || 0);
         setRatingCount(data.ratingCount || 0);
         setLoading(false);
       })
-      .catch(() => { setError("Could not load profile."); setLoading(false); });
+      .catch(() => {
+        if (cancelled) return;
+        setError("Could not load profile.");
+        setLoading(false);
+      });
 
     fetch(`${API.ratings}/ratee/${loggedUser.userId}`)
       .then(r => r.json())
       .then(data => {
+        if (cancelled) return;
         setRatings(Array.isArray(data.ratings) ? data.ratings : []);
         if (data.average) setAvgRating(data.average);
         if (data.count)   setRatingCount(data.count);
       })
       .catch(() => {});
-  }, []);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setSuccess(""); setError("");
-  };
+    return () => { cancelled = true; };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // ↑ intentionally empty: we only want this to fire on mount.
+  //   loggedUser is stored in a ref so it won't cause re-runs.
+
+  const handleChange = useCallback((e) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setSuccess("");
+    setError("");
+  }, []);
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -112,7 +133,11 @@ function Profile() {
       const price = parseFloat(form.pricePerDay);
       if (isNaN(price) || price < 0) { setError("Please enter a valid price per day."); return; }
     }
-    setSaving(true); setSuccess(""); setError("");
+
+    setSaving(true);
+    setSuccess("");
+    setError("");
+
     try {
       const payload = {
         name:    form.name.trim(),
@@ -124,7 +149,11 @@ function Profile() {
         payload.pricePerDay    = parseFloat(form.pricePerDay) || 0;
         payload.specialisation = form.specialisation.trim();
       }
+
       const saved = await saveProfile(loggedUser.role, loggedUser.userId, payload);
+
+      // Update localStorage but do NOT let it trigger any navigation.
+      // We pass the updated fields and keep everything else intact.
       updateLocalUser({
         name:   saved.name,
         mobile: saved.mobile,
@@ -134,7 +163,15 @@ function Profile() {
           specialisation: saved.specialisation,
         }),
       });
+
+      // Sync ref so subsequent saves use the latest values
+      loggedUserRef.current = getUser();
+
       setSuccess("Profile saved successfully ✅");
+
+      // Scroll to top so the user sees the success message
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
     } catch (err) {
       setError(err.message || "Save failed.");
     } finally {
@@ -347,7 +384,7 @@ function Profile() {
                   </div>
                   <div className={styles.reviewsList}>
                     {ratings.map(r => (
-                      <div key={r.id} className={styles.reviewCard}>
+                      <div key={r.id || r._id} className={styles.reviewCard}>
                         <div className={styles.reviewCardHead}>
                           <div>
                             <span className={styles.reviewerName}>
