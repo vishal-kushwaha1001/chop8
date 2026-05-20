@@ -15,6 +15,6 @@ const chefSchema = new mongoose.Schema({
   avgRating:      { type: Number, default: 0.0 },
   ratingCount:    { type: Number, default: 0 },
   photo:          { type: String },
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true } });
 
 module.exports = mongoose.model('Chef', chefSchema);

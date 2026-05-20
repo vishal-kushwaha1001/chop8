@@ -23,7 +23,7 @@ function Footer() {
       </div>
 
       <div className={styles.footerCopy}>
-        © 2026 CHOP8 · JSS Academy, Noida · Vinayak-Vishal-Anant
+        © 2026 CHOP8 · JSS Academy, Noida · Vishal kushwaha
       </div>
     </footer>
   );

@@ -11,6 +11,6 @@ const userSchema = new mongoose.Schema({
   avgRating:   { type: Number, default: 0.0 },
   ratingCount: { type: Number, default: 0 },
   photo:       { type: String },  // stored as base64 / URL (was LONGTEXT in MySQL)
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true } });
 
 module.exports = mongoose.model('User', userSchema);

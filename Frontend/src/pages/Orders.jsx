@@ -1,3 +1,581 @@
+
+
+// // src/pages/Orders.jsx
+
+
+// import React, { useEffect, useState, useCallback } from "react";
+// import { getUser } from "../services/AuthService";
+// import { API, PAYMENT } from "../config";
+// import { Link } from "react-router";
+// import PaymentGateway from "../Components/PaymentGateway";
+// import RatingModal from "../Components/RatingModal";
+// import styles from "./Styles/Orders.module.css";
+
+// /* ── Helpers ────────────────────────────────────────────── */
+// function isExpired(date, timeOut, status) {
+//   if (status === "EXPIRED")   return true;
+//   if (status === "CANCELLED") return false;
+//   if (!date) return false;
+//   const now = new Date();
+//   if (timeOut) return now > new Date(`${date}T${timeOut}:00`);
+//   return now > new Date(`${date}T23:59:59`);
+// }
+// function calcDuration(a, b) {
+//   try {
+//     const [h1,m1]=a.split(":").map(Number),[h2,m2]=b.split(":").map(Number);
+//     const mins=(h2*60+m2)-(h1*60+m1); if(mins<=0) return null;
+//     const h=Math.floor(mins/60),m=mins%60; return m===0?`${h} hrs`:`${h}h ${m}m`;
+//   } catch { return null; }
+// }
+// function isLateCancelWindow(date, timeIn) {
+//   if (!date || !timeIn) return false;
+//   try {
+//     const start  = new Date(`${date}T${timeIn}:00`);
+//     const cutoff = new Date(start.getTime() - PAYMENT.CANCEL_CUTOFF_HRS*60*60*1000);
+//     return new Date() > cutoff;
+//   } catch { return false; }
+// }
+// function timeUntilLateCancelWindow(date, timeIn) {
+//   if (!date || !timeIn) return "";
+//   try {
+//     const start  = new Date(`${date}T${timeIn}:00`);
+//     const cutoff = new Date(start.getTime() - PAYMENT.CANCEL_CUTOFF_HRS*60*60*1000);
+//     const now    = new Date();
+//     if (now > cutoff) return "";
+//     const diffMs = cutoff - now;
+//     const hrs    = Math.floor(diffMs/(1000*60*60));
+//     const mins   = Math.floor((diffMs%(1000*60*60))/(1000*60));
+//     return hrs > 0 ? `Free cancel for ${hrs}h ${mins}m more` : `Free cancel for ${mins}m more`;
+//   } catch { return ""; }
+// }
+
+// /* ── Penalty Dialog ─────────────────────────────────────── */
+// function PenaltyConfirmDialog({ booking, onConfirm, onDismiss }) {
+//   const advancePaid   = booking.advancePaymentStatus === "PAID";
+//   const penaltyAmount = advancePaid ? (booking.advanceAmount || 0) : 0;
+//   return (
+//     <div className={styles.modalBackdrop}>
+//       <div className={styles.penaltyModal}>
+//         <div className={styles.penaltyHeader}>
+//           <div className={styles.penaltyHeaderIcon}>⚠️</div>
+//           <div className={styles.penaltyHeaderTitle}>Late Cancellation</div>
+//           <div className={styles.penaltyHeaderSub}>Within {PAYMENT.CANCEL_CUTOFF_HRS} hours of scheduled start</div>
+//         </div>
+//         <div className={styles.penaltyBody}>
+//           <div className={styles.penaltyInfoRow}>
+//             <span className={styles.penaltyInfoLabel}>Chef</span>
+//             <span className={styles.penaltyInfoValue}>{booking.chef?.name}</span>
+//           </div>
+//           <div className={styles.penaltyInfoRow}>
+//             <span className={styles.penaltyInfoLabel}>Date & Time</span>
+//             <span className={styles.penaltyInfoValue}>{booking.date} · {booking.timeIn} – {booking.timeOut}</span>
+//           </div>
+
+//           <div className={`${styles.penaltyBox} ${advancePaid ? styles.penaltyBoxWarn : styles.penaltyBoxOk}`}>
+//             {advancePaid ? (
+//               <>
+//                 <div className={styles.penaltyBoxTitle}>💸 Advance will be forfeited</div>
+//                 <div className={styles.penaltyBoxRow}>
+//                   <span>Advance paid (30%)</span>
+//                   <span className={styles.penaltyAmt}>₹{penaltyAmount}</span>
+//                 </div>
+//                 <div className={styles.penaltyBoxRow}>
+//                   <span>Final amount (70%)</span>
+//                   <span className={styles.penaltyFree}>₹{booking.finalAmount||0} — Not charged</span>
+//                 </div>
+//               </>
+//             ) : (
+//               <>
+//                 <div className={styles.penaltyBoxTitle}>✅ No Penalty</div>
+//                 <div className={styles.penaltyBoxNote}>No advance was paid online, so no deduction applies.</div>
+//               </>
+//             )}
+//           </div>
+
+//           <div className={styles.penaltyBtns}>
+//             <button className={styles.penaltyConfirmBtn} onClick={onConfirm}>
+//               {advancePaid ? `Cancel & Forfeit ₹${penaltyAmount}` : "Cancel Booking"}
+//             </button>
+//             <button className={styles.penaltyDismissBtn} onClick={onDismiss}>Keep Booking</button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* ── AmtCell ────────────────────────────────────────────── */
+// function AmtCell({ label, value, bold, blue, orange, green }) {
+//   return (
+//     <div className={`${styles.amtCell} ${bold ? styles.amtCellBold : ""}`}>
+//       <div className={styles.amtLabel}>{label}</div>
+//       <div className={`${styles.amtValue} ${blue?"text-blue":""} ${orange?styles.amtOrange:""} ${green?styles.amtGreen:""} ${blue?styles.amtBlue:""}`}>
+//         {value}
+//       </div>
+//     </div>
+//   );
+// }
+
+// /* ── StatusPill ─────────────────────────────────────────── */
+// function StatusPill({ icon, label, variant }) {
+//   return (
+//     <span className={`${styles.statusPill} ${styles[`pill_${variant}`]}`}>
+//       {icon} {label}
+//     </span>
+//   );
+// }
+
+// /* ── Orders ─────────────────────────────────────────────── */
+// function Orders() {
+//   const [bookings,      setBookings]      = useState([]);
+//   const [loading,       setLoading]       = useState(true);
+//   const [payBooking,    setPayBooking]    = useState(null);
+//   const [paymentType,   setPaymentType]   = useState("ADVANCE");
+//   const [rateBooking,   setRateBooking]   = useState(null);
+//   const [ratedSet,      setRatedSet]      = useState(new Set());
+//   const [penaltyDialog, setPenaltyDialog] = useState(null);
+//   const [filter,        setFilter]        = useState("ALL");
+//   const loggedUser = getUser();
+
+//   const fetchBookings = useCallback(() => {
+//     if (!loggedUser || loggedUser.role !== "customer") { setLoading(false); return; }
+//     fetch(`${API.bookings}/user/${loggedUser.userId}`)
+//       .then(r => r.json())
+//       .then(data => {
+//         const list = Array.isArray(data) ? data : [];
+//         setBookings(list);
+//         setLoading(false);
+//         list.forEach(b => {
+//           fetch(`${API.ratings}/booking/${b.id}/rater/${loggedUser.userId}?role=customer`)
+//             .then(r => r.json())
+//             .then(d => { if (d.alreadyRated) setRatedSet(prev => new Set([...prev, b.id])); })
+//             .catch(() => {});
+//         });
+//       })
+//       .catch(() => setLoading(false));
+//   }, [loggedUser?.userId]);
+
+//   useEffect(() => { fetchBookings(); }, [fetchBookings]);
+
+//   const refetchBooking = useCallback(async (bookingId) => {
+//     try {
+//       const res  = await fetch(`${API.bookings}/user/${loggedUser.userId}`);
+//       const list = await res.json();
+//       if (!Array.isArray(list)) return;
+//       const updated = list.find(b => b.id === bookingId);
+//       if (updated) setBookings(prev => prev.map(b => b.id === bookingId ? updated : b));
+//     } catch { }
+//   }, [loggedUser?.userId]);
+
+//   const handleCancelClick = (booking) => {
+//     const lateWindow = isLateCancelWindow(booking.date, booking.timeIn);
+//     if (lateWindow && booking.status !== "PENDING") setPenaltyDialog(booking);
+//     else executeCancellation(booking.id);
+//   };
+
+//   const executeCancellation = async (bookingId) => {
+//     setPenaltyDialog(null);
+//     try {
+//       const res  = await fetch(`${API.bookings}/${bookingId}`, { method:"DELETE", headers:{"Content-Type":"application/json"} });
+//       const data = await res.json();
+//       if (res.ok) {
+//         setBookings(prev => prev.map(b => b.id === bookingId ? {
+//           ...b, status:"CANCELLED",
+//           cancellationPenalty: data.cancellationPenalty || 0,
+//           cancellationNote:    data.cancellationNote    || "",
+//         } : b));
+//       } else { alert(data.error || "Could not cancel."); }
+//     } catch { alert("Network error."); }
+//   };
+
+//   const openPayment = (booking, type) => { setPaymentType(type); setPayBooking(booking); };
+
+//   /* ── Gate screens ── */
+//   if (!loggedUser) return (
+//     <div className={styles.page}>
+//       <div className={styles.gateWrap}>
+//         <div className={styles.gateCard}>
+//           <div className={styles.gateIcon}>🔒</div>
+//           <h2 className={styles.gateH}>Login Required</h2>
+//           <p className={styles.gateP}>Please login to view your orders.</p>
+//           <Link to="/login" className={styles.gateBtn}>Go to Login</Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+//   if (loggedUser.role === "chef") return (
+//     <div className={styles.page}>
+//       <div className={styles.gateWrap}>
+//         <div className={styles.gateCard} style={{ borderColor:"#fbbf24" }}>
+//           <div className={styles.gateIcon}>👨‍🍳</div>
+//           <h2 className={styles.gateH} style={{ color:"#fbbf24" }}>Chef Account</h2>
+//           <p className={styles.gateP}>Go to your chef dashboard instead.</p>
+//           <Link to="/chef-orders" className={styles.gateBtnYellow}>My Dashboard</Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+
+//   /* ── Filter bookings ── */
+//   const FILTERS = ["ALL", "CONFIRMED", "PENDING", "EXPIRED", "CANCELLED"];
+//   const filteredBookings = bookings.filter(b => {
+//     if (filter === "ALL") return true;
+//     if (filter === "CONFIRMED") return b.status === "CONFIRMED" && !isExpired(b.date, b.timeOut, b.status);
+//     if (filter === "PENDING")   return b.status === "PENDING" && b.advancePaymentStatus !== "PAID";
+//     if (filter === "EXPIRED")   return isExpired(b.date, b.timeOut, b.status);
+//     if (filter === "CANCELLED") return b.status === "CANCELLED";
+//     return true;
+//   });
+
+//   return (
+//     <div className={styles.page}>
+
+//       {penaltyDialog && (
+//         <PenaltyConfirmDialog
+//           booking={penaltyDialog}
+//           onConfirm={() => executeCancellation(penaltyDialog.id)}
+//           onDismiss={() => setPenaltyDialog(null)}
+//         />
+//       )}
+//       {payBooking && (
+//         <PaymentGateway
+//           booking={payBooking} paymentType={paymentType}
+//           onClose={() => setPayBooking(null)}
+//           onSuccess={async () => { setPayBooking(null); await refetchBooking(payBooking.id); }}
+//         />
+//       )}
+//       {rateBooking && (
+//         <RatingModal
+//           booking={rateBooking}
+//           raterId={loggedUser.userId} raterName={loggedUser.name} raterRole="customer"
+//           rateeId={rateBooking.chef?.id} rateeName={rateBooking.chef?.name} rateeRole="chef"
+//           onClose={() => setRateBooking(null)}
+//           onSubmitted={() => { setRatedSet(prev => new Set([...prev, rateBooking.id])); setRateBooking(null); }}
+//         />
+//       )}
+
+//       {/* ── PAGE HEADER ── */}
+//       <div className={styles.pageHeader}>
+//         <div className={styles.pageHeaderLeft}>
+//           <div className={styles.pageHeaderBadge}>
+//             <span className={styles.bdot} /> My Orders
+//           </div>
+//           <h1 className={styles.pageTitle}>Your Bookings</h1>
+//           <p className={styles.pageSubtitle}>
+//             Welcome back, <span className={styles.userName}>{loggedUser.name}</span> · {bookings.length} booking{bookings.length !== 1 ? "s" : ""}
+//           </p>
+//         </div>
+//         <div className={styles.pageHeaderRight}>
+//           <Link to="/payments" className={styles.headerBtnSecondary}>💳 Payments</Link>
+//           <Link to="/services" className={styles.headerBtnPrimary}>+ Book Chef</Link>
+//         </div>
+//       </div>
+
+//       {/* ── FILTER TABS ── */}
+//       <div className={styles.filterBar}>
+//         {FILTERS.map(f => (
+//           <button
+//             key={f}
+//             className={`${styles.filterTab} ${filter === f ? styles.filterTabActive : ""}`}
+//             onClick={() => setFilter(f)}
+//           >
+//             {f}
+//             {f !== "ALL" && (
+//               <span className={styles.filterCount}>
+//                 {bookings.filter(b => {
+//                   if (f === "CONFIRMED") return b.status === "CONFIRMED" && !isExpired(b.date, b.timeOut, b.status);
+//                   if (f === "PENDING")   return b.status === "PENDING" && b.advancePaymentStatus !== "PAID";
+//                   if (f === "EXPIRED")   return isExpired(b.date, b.timeOut, b.status);
+//                   if (f === "CANCELLED") return b.status === "CANCELLED";
+//                   return false;
+//                 }).length}
+//               </span>
+//             )}
+//           </button>
+//         ))}
+//       </div>
+
+//       {/* ── CONTENT ── */}
+//       <div className={styles.content}>
+//         {loading ? (
+//           <div className={styles.skeletonList}>
+//             {[1,2,3].map(i => (
+//               <div key={i} className={styles.skeletonCard}>
+//                 <div className={styles.skeletonRow}>
+//                   <div className={styles.skeletonBlock} style={{ width:"40%", height:"18px" }} />
+//                   <div className={styles.skeletonBlock} style={{ width:"120px", height:"26px", borderRadius:"13px" }} />
+//                 </div>
+//                 <div className={styles.skeletonRow} style={{ marginTop:"16px" }}>
+//                   {[1,2,3].map(j => <div key={j} className={styles.skeletonBlock} style={{ flex:1, height:"48px", borderRadius:"8px" }} />)}
+//                 </div>
+//                 <div className={styles.skeletonBlock} style={{ width:"100%", height:"80px", borderRadius:"10px", marginTop:"14px" }} />
+//               </div>
+//             ))}
+//           </div>
+//         ) : filteredBookings.length === 0 ? (
+//           <div className={styles.emptyState}>
+//             <div className={styles.emptyIcon}>{filter === "ALL" ? "📋" : "🔍"}</div>
+//             <h3 className={styles.emptyH}>{filter === "ALL" ? "No bookings yet" : `No ${filter.toLowerCase()} bookings`}</h3>
+//             <p className={styles.emptyP}>
+//               {filter === "ALL" ? "Start by browsing our professional chefs." : `You have no ${filter.toLowerCase()} bookings right now.`}
+//             </p>
+//             {filter === "ALL"
+//               ? <Link to="/services" className={styles.emptyBtn}>Browse Chefs →</Link>
+//               : <button className={styles.emptyBtnOutline} onClick={() => setFilter("ALL")}>Show All</button>
+//             }
+//           </div>
+//         ) : (
+//           <div className={styles.bookingList}>
+//             {filteredBookings.map(booking => {
+//               const advancePaidAlready = booking.advancePaymentStatus === "PAID";
+//               const isPending   = booking.status === "PENDING" && !advancePaidAlready;
+//               const isCancelled = booking.status === "CANCELLED";
+//               const expired     = isExpired(booking.date, booking.timeOut, booking.status);
+//               const inactive    = isCancelled || expired;
+//               const isCOD       = booking.paymentMode === "COD";
+//               const advancePaid = advancePaidAlready;
+//               const finalPaid   = booking.finalPaymentStatus === "PAID" || booking.paymentStatus === "PAID";
+//               const lateWindow  = !inactive && !isPending && isLateCancelWindow(booking.date, booking.timeIn);
+//               const freeTimeMsg = timeUntilLateCancelWindow(booking.date, booking.timeIn);
+//               const hasPenalty  = booking.cancellationPenalty > 0;
+//               const canRate     = expired && (finalPaid || isCOD) && !ratedSet.has(booking.id);
+//               const alreadyRated= ratedSet.has(booking.id);
+//               const isEmergency = booking.isEmergency === true;
+//               const dur         = booking.timeIn && booking.timeOut ? calcDuration(booking.timeIn, booking.timeOut) : null;
+
+//               /* status meta */
+//               const statusMeta = isPending
+//                 ? { label:"Pending Payment", cls: styles.statusPending  }
+//                 : isCancelled
+//                 ? { label:"Cancelled",       cls: styles.statusCancelled }
+//                 : expired
+//                 ? { label:"Expired",         cls: styles.statusExpired   }
+//                 : { label:"Confirmed",       cls: styles.statusConfirmed };
+
+//               /* token display */
+//               const tokenMeta = isPending
+//                 ? { text:"⏳ AWAITING PAYMENT", cls: styles.tokenPending  }
+//                 : isCancelled
+//                 ? { text:"✕ CANCELLED",          cls: styles.tokenCancelled }
+//                 : !advancePaid && !isCOD
+//                 ? { text:"💳 PAY TO CONFIRM",     cls: styles.tokenPayNow   }
+//                 : isEmergency
+//                 ? { text:`🚨 ${booking.tokenId||"—"}`, cls: styles.tokenEmergency }
+//                 : finalPaid
+//                 ? { text:`✓ ${booking.tokenId}`,  cls: styles.tokenFinal    }
+//                 : advancePaid
+//                 ? { text:`${booking.tokenId} · ADV`, cls: styles.tokenAdvance }
+//                 : isCOD
+//                 ? { text:`${booking.tokenId} · COD`, cls: styles.tokenCod    }
+//                 : { text:booking.tokenId || "—", cls: styles.tokenDefault  };
+
+//               return (
+//                 <div key={booking.id} className={`${styles.bookingCard} ${inactive ? styles.bookingCardInactive : ""}`}>
+
+//                   {/* ── Warning banners ── */}
+//                   {isPending && (
+//                     <div className={styles.pendingBanner}>
+//                       <div>
+//                         <div className={styles.pendingBannerTitle}>⏳ Advance Payment Required</div>
+//                         <div className={styles.pendingBannerSub}>Token not generated yet — pay ₹{booking.advanceAmount||0} to confirm your booking</div>
+//                       </div>
+//                       <button className={styles.pendingPayBtn} onClick={() => openPayment(booking, "ADVANCE")}>
+//                         💳 Pay ₹{booking.advanceAmount||0}
+//                       </button>
+//                     </div>
+//                   )}
+//                   {lateWindow && (
+//                     <div className={styles.lateBanner}>
+//                       ⏰ <strong>Late cancel window</strong> — within {PAYMENT.CANCEL_CUTOFF_HRS}h of start.
+//                       {advancePaid ? ` Cancelling forfeits ₹${booking.advanceAmount||0}.` : " No penalty."}
+//                     </div>
+//                   )}
+
+//                   {/* ── Card body ── */}
+//                   <div className={styles.cardBody}>
+
+//                     {/* Top row: chef name + token */}
+//                     <div className={styles.cardTopRow}>
+//                       <div className={styles.cardChefName}>
+//                         <span className={styles.chefEmoji}>👨‍🍳</span>
+//                         {booking.chef?.name || "—"}
+//                         {isEmergency && <span className={styles.emergencyBadge}>🚨 Emergency</span>}
+//                       </div>
+//                       <div className={`${styles.tokenBadge} ${tokenMeta.cls}`}>{tokenMeta.text}</div>
+//                     </div>
+
+//                     {/* Meta grid */}
+//                     <div className={styles.metaGrid}>
+//                       <div className={styles.metaItem}>
+//                         <div className={styles.metaLabel}>Date</div>
+//                         <div className={styles.metaValue}>📅 {booking.date}</div>
+//                       </div>
+//                       {booking.timeIn && (
+//                         <div className={styles.metaItem}>
+//                           <div className={styles.metaLabel}>Check-in</div>
+//                           <div className={styles.metaValue}>🕐 {booking.timeIn}</div>
+//                         </div>
+//                       )}
+//                       {booking.timeOut && (
+//                         <div className={styles.metaItem}>
+//                           <div className={styles.metaLabel}>Check-out</div>
+//                           <div className={styles.metaValue}>🕔 {booking.timeOut}</div>
+//                         </div>
+//                       )}
+//                       {dur && (
+//                         <div className={styles.metaItem}>
+//                           <div className={styles.metaLabel}>Duration</div>
+//                           <div className={styles.metaValue}>⏱ {dur}</div>
+//                         </div>
+//                       )}
+//                       <div className={styles.metaItem}>
+//                         <div className={styles.metaLabel}>Status</div>
+//                         <div className={`${styles.statusChip} ${statusMeta.cls}`}>{statusMeta.label}</div>
+//                       </div>
+//                       <div className={styles.metaItem}>
+//                         <div className={styles.metaLabel}>Payment</div>
+//                         <div className={styles.metaValue}>{isCOD ? "💵 Cash on Delivery" : "💳 Online"}</div>
+//                       </div>
+//                     </div>
+
+//                     {/* Price summary */}
+//                     {booking.totalAmount > 0 && (
+//                       <div className={`${styles.priceBox} ${isEmergency ? styles.priceBoxEmergency : ""}`}>
+//                         <div className={styles.priceBoxTitle}>
+//                           💰 Payment Summary
+//                           {isEmergency && <span className={styles.emergencyTag}>🚨 1.5× Rate Applied</span>}
+//                         </div>
+//                         <div className={styles.priceGrid}>
+//                           <AmtCell label="Chef"        value={`₹${booking.chefAmount||0}`} />
+//                           <AmtCell label="Platform"    value={`₹${booking.platformCharge||0}`} />
+//                           <AmtCell label="GST 3%"      value={`₹${booking.gstAmount||0}`} />
+//                           {isEmergency && booking.emergencySurcharge > 0 && (
+//                             <AmtCell label="⚡ Surge"  value={`+₹${booking.emergencySurcharge}`} bold orange />
+//                           )}
+//                           <AmtCell label="Total"       value={`₹${booking.totalAmount||0}`}  bold blue />
+//                           <AmtCell label="Advance 30%" value={`₹${booking.advanceAmount||0}`} bold orange />
+//                           <AmtCell label="Final 70%"   value={`₹${booking.finalAmount||0}`}  bold green />
+//                         </div>
+//                       </div>
+//                     )}
+
+//                     {/* Payment status pills */}
+//                     <div className={styles.pillsRow}>
+//                       {isCOD ? (
+//                         <StatusPill icon="💵" label="Cash on Delivery" variant="cod" />
+//                       ) : (
+//                         <>
+//                           <StatusPill
+//                             icon={advancePaid ? "✅" : "⏳"}
+//                             label={advancePaid ? `Advance Paid ₹${booking.advanceAmount||0}` : `Advance ₹${booking.advanceAmount||0} Pending`}
+//                             variant={advancePaid ? "paid" : "pending"}
+//                           />
+//                           {advancePaid && (
+//                             <StatusPill
+//                               icon={finalPaid ? "✅" : "⏳"}
+//                               label={finalPaid ? `Final Paid ₹${booking.finalAmount||0}` : `Final ₹${booking.finalAmount||0} Pending`}
+//                               variant={finalPaid ? "paid" : "grey"}
+//                             />
+//                           )}
+//                         </>
+//                       )}
+//                     </div>
+
+//                     {/* Cancellation note */}
+//                     {isCancelled && hasPenalty && (
+//                       <div className={styles.cancelNote}>
+//                         <div className={styles.cancelNoteTitle}>💸 Cancellation Penalty</div>
+//                         <div className={styles.cancelNoteBody}>₹{booking.cancellationPenalty} advance forfeited (late cancel within {PAYMENT.CANCEL_CUTOFF_HRS}h)</div>
+//                         {booking.cancellationNote && <div className={styles.cancelNoteSub}>{booking.cancellationNote}</div>}
+//                       </div>
+//                     )}
+//                     {isCancelled && !hasPenalty && booking.cancellationNote && (
+//                       <div className={styles.cancelNoteOk}>✅ {booking.cancellationNote}</div>
+//                     )}
+
+//                     {/* Action buttons */}
+//                     <div className={styles.actionsRow}>
+//                       {!inactive && !isPending && !isCOD && advancePaid && !finalPaid && (
+//                         <button className={styles.btnFinal} onClick={() => openPayment(booking, "FINAL")}>
+//                           💳 Pay Final ₹{booking.finalAmount||0}
+//                         </button>
+//                       )}
+//                       {!inactive && !isPending && (
+//                         <div className={styles.cancelGroup}>
+//                           <button
+//                             className={`${styles.btnCancel} ${lateWindow ? styles.btnCancelLate : ""}`}
+//                             onClick={() => handleCancelClick(booking)}
+//                           >
+//                             {lateWindow ? "⚠️ Cancel (Penalty)" : "Cancel Booking"}
+//                           </button>
+//                           {freeTimeMsg && !lateWindow && (
+//                             <span className={styles.freeMsg}>✅ {freeTimeMsg}</span>
+//                           )}
+//                         </div>
+//                       )}
+//                       {isPending && (
+//                         <button className={styles.btnCancelSmall} onClick={() => executeCancellation(booking.id)}>
+//                           Cancel Booking
+//                         </button>
+//                       )}
+//                       {canRate && (
+//                         <button
+//                           className={styles.btnRate}
+//                           onClick={async () => {
+//                             try {
+//                               const r = await fetch(`${API.ratings}/booking/${booking.id}/rater/${loggedUser.userId}?role=customer`);
+//                               const d = await r.json();
+//                               if (d.alreadyRated) { setRatedSet(prev => new Set([...prev, booking.id])); return; }
+//                             } catch { }
+//                             setRateBooking(booking);
+//                           }}
+//                         >
+//                           ⭐ Rate Chef
+//                         </button>
+//                       )}
+//                       {alreadyRated && (
+//                         <span className={styles.ratedMsg}>✅ Chef rated</span>
+//                       )}
+//                     </div>
+
+//                     {/* Transaction IDs + receipt */}
+//                     {(booking.advancePaymentId || booking.finalPaymentId) && (
+//                       <div className={styles.txnRow}>
+//                         <div className={styles.txnIds}>
+//                           {booking.advancePaymentId && <div>Advance Txn: <span className={styles.txnId}>{booking.advancePaymentId}</span></div>}
+//                           {booking.finalPaymentId   && <div>Final Txn:   <span className={styles.txnId}>{booking.finalPaymentId}</span></div>}
+//                         </div>
+//                         <a href={`${API.receipt}/${booking.id}`} download={`Chop8_Receipt_${booking.tokenId||booking.id}.txt`} style={{ textDecoration:"none" }}>
+//                           <button className={styles.btnReceipt}>⬇️ Receipt</button>
+//                         </a>
+//                       </div>
+//                     )}
+//                   </div>
+
+//                   {/* Watermark */}
+//                   {inactive && (
+//                     <div className={styles.watermark}>
+//                       {isCancelled ? "CANCELLED" : "EXPIRED"}
+//                     </div>
+//                   )}
+//                 </div>
+//               );
+//             })}
+//           </div>
+//         )}
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default Orders;
+
+
+
+
+
+
+
 // // src/pages/Orders.jsx
 // import React, { useEffect, useState, useCallback } from "react";
 // import { getUser } from "../services/AuthService";
@@ -609,6 +1187,7 @@ function Orders() {
   const [rateBooking,   setRateBooking]   = useState(null);
   const [ratedSet,      setRatedSet]      = useState(new Set());
   const [penaltyDialog, setPenaltyDialog] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState(null);
   const [filter,        setFilter]        = useState("ALL");
   const loggedUser = getUser();
 
@@ -644,8 +1223,10 @@ function Orders() {
 
   const handleCancelClick = (booking) => {
     const lateWindow = isLateCancelWindow(booking.date, booking.timeIn);
+    // ALWAYS show a confirmation dialog — either the penalty dialog (late window)
+    // or a simple confirm dialog (normal/pending cancel). Never cancel directly.
     if (lateWindow && booking.status !== "PENDING") setPenaltyDialog(booking);
-    else executeCancellation(booking.id);
+    else setConfirmDialog(booking);
   };
 
   const executeCancellation = async (bookingId) => {
@@ -711,6 +1292,38 @@ function Orders() {
           onConfirm={() => executeCancellation(penaltyDialog.id)}
           onDismiss={() => setPenaltyDialog(null)}
         />
+      )}
+      {/* Simple confirm dialog for non-late-window cancellations */}
+      {confirmDialog && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.penaltyModal}>
+            <div className={styles.penaltyHeader} style={{ background: "linear-gradient(135deg,#1e3c72,#2a5298)" }}>
+              <div className={styles.penaltyHeaderIcon}>🗑️</div>
+              <div className={styles.penaltyHeaderTitle}>Cancel Booking?</div>
+              <div className={styles.penaltyHeaderSub}>This action cannot be undone</div>
+            </div>
+            <div className={styles.penaltyBody}>
+              <div className={styles.penaltyInfoRow}>
+                <span className={styles.penaltyInfoLabel}>Chef</span>
+                <span className={styles.penaltyInfoValue}>{confirmDialog.chef?.name}</span>
+              </div>
+              <div className={styles.penaltyInfoRow}>
+                <span className={styles.penaltyInfoLabel}>Date & Time</span>
+                <span className={styles.penaltyInfoValue}>{confirmDialog.date} · {confirmDialog.timeIn} – {confirmDialog.timeOut}</span>
+              </div>
+              <div className={`${styles.penaltyBox} ${styles.penaltyBoxOk}`}>
+                <div className={styles.penaltyBoxTitle}>✅ No Penalty</div>
+                <div className={styles.penaltyBoxNote}>You are cancelling within the free window. No charges apply.</div>
+              </div>
+              <div className={styles.penaltyBtns}>
+                <button className={styles.penaltyConfirmBtn} onClick={() => { executeCancellation(confirmDialog.id); setConfirmDialog(null); }}>
+                  Yes, Cancel Booking
+                </button>
+                <button className={styles.penaltyDismissBtn} onClick={() => setConfirmDialog(null)}>Keep Booking</button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
       {payBooking && (
         <PaymentGateway
@@ -989,7 +1602,7 @@ function Orders() {
                         </div>
                       )}
                       {isPending && (
-                        <button className={styles.btnCancelSmall} onClick={() => executeCancellation(booking.id)}>
+                        <button className={styles.btnCancelSmall} onClick={() => setConfirmDialog(booking)}>
                           Cancel Booking
                         </button>
                       )}

@@ -144,8 +144,8 @@ export default function About() {
           <div className={styles.secLabel}>Architecture</div>
           <h2 className={styles.secTitle}>Built on a 4-Layer Stack</h2>
           <p className={styles.secSub}>
-            React frontend → Spring Boot REST API → MySQL database → Python ML microservice.
-            Each layer communicates via HTTP JSON, with BCrypt security and Hibernate ORM.
+            React frontend → Express.js  REST API → MONGODB database → Python ML microservice.
+            Each layer communicates via HTTP JSON.
           </p>
         </Reveal>
 
@@ -332,23 +332,22 @@ export default function About() {
           <div className={styles.builderCard}>
             <div className={styles.builderEmoji}>👨‍💻</div>
             <div className={styles.builderInfo}>
-              <div className={styles.builderName}>Vinayak Prasad Singh </div>
+              
               <div className={styles.builderName}>Vishal Kumar Kushwaha </div>
-              <div className={styles.builderName}>Anant Sagar</div>
               <div className={styles.builderInst}>JSS Academy of Technical Education, Noida · 2026</div>
               <p className={styles.builderDesc}>
-                Built CHOP8 as a full-stack capstone project demonstrating React.js, Spring Boot,
-                MySQL, and Python ML integration. The platform features real-time availability tracking,
+                Built CHOP8 as a full-stack capstone project demonstrating React.js,node.js, express.js,
+                MongoDb, and Python ML integration. The platform features real-time availability tracking,
                 AI-powered chef ranking, online payments, and a role-based user system.
               </p>
               <div className={styles.builderLinks}>
                 <a
-                  href="https://github.com/VinayakSingh3002/Chop8"
+                  href="https://github.com/vishal-kushwaha1001/chop8.git"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.builderGithub}
                 >
-                  🐙 GitHub — VinayakSingh3002/Chop8
+                  🐙 GitHub — Vishal-kushwaha1001/Chop8
                 </a>
               </div>
             </div>

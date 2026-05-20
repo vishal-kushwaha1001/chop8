@@ -46,6 +46,6 @@ const bookingSchema = new mongoose.Schema({
   // Relationships (Java @ManyToOne → MongoDB ObjectId refs)
   chef: { type: mongoose.Schema.Types.ObjectId, ref: 'Chef' },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-}, { timestamps: true });
+}, { timestamps: true, toJSON: { virtuals: true } });
 
 module.exports = mongoose.model('Booking', bookingSchema);

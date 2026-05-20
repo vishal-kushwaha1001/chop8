@@ -53,10 +53,8 @@ async function bookChef(bookingData) {
     }
   }
 
-  // Check for duplicate confirmed booking (same chef/user/date)
-  const duplicate = await Booking.findOne({ chef: chefId, user: userId, date, status: 'CONFIRMED' });
-  if (duplicate)
-    throw new Error(`You already have a booking with ${chef.name} on ${date}. Please cancel it first.`);
+  // NOTE: Multiple bookings with the same chef on the same date are allowed
+  // as long as there is no time-slot overlap (checked above).
 
   if (!timeIn  || !timeIn.trim())  throw new Error('Please provide a check-in time.');
   if (!timeOut || !timeOut.trim()) throw new Error('Please provide a check-out time.');
