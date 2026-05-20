@@ -1,0 +1,178 @@
+/* src/pages/Styles/NotFound.module.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50%       { transform: translateY(-18px) rotate(5deg); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(38, 160, 218, 0.35); }
+  50%       { box-shadow: 0 0 0 8px rgba(38, 160, 218, 0); }
+}
+@keyframes countdownShrink {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+/* ── Page ───────────────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  font-family: 'DM Sans', sans-serif;
+  text-align: center;
+  gap: 0;
+}
+
+/* ── 404 Code ───────────────────────────────────────────── */
+.codeWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.four {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 140px;
+  line-height: 1;
+  color: #1e293b;
+  letter-spacing: 4px;
+  text-shadow:
+    0 0 0 #334155,
+    2px 2px 0 #334155;
+  -webkit-text-stroke: 2px #334155;
+}
+
+.plate {
+  font-size: 100px;
+  line-height: 1;
+  animation: float 4s ease-in-out infinite;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.4));
+  margin: 0 4px;
+}
+
+/* ── Title ──────────────────────────────────────────────── */
+.title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: 2px;
+  color: #f8fafc;
+  margin: 0 0 12px;
+  animation: fadeInUp 0.65s ease 0.1s both;
+}
+
+/* ── Description ────────────────────────────────────────── */
+.desc {
+  font-size: 15px;
+  color: #64748b;
+  max-width: 400px;
+  line-height: 1.65;
+  margin: 0 0 28px;
+  animation: fadeInUp 0.65s ease 0.15s both;
+}
+
+/* ── Countdown ──────────────────────────────────────────── */
+.countdownBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(38, 160, 218, 0.07);
+  border: 1px solid rgba(38, 160, 218, 0.2);
+  color: #64748b;
+  font-size: 13px;
+  padding: 8px 18px;
+  border-radius: 20px;
+  margin-bottom: 28px;
+  animation: fadeInUp 0.65s ease 0.2s both;
+}
+
+.countdownDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #26a0da;
+  flex-shrink: 0;
+  animation: pulse 1.5s infinite;
+}
+
+.countdownNum {
+  color: #26a0da;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ── Home Button ────────────────────────────────────────── */
+.btnHome {
+  display: inline-block;
+  padding: 13px 36px;
+  background: #26a0da;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 18px rgba(38, 160, 218, 0.3);
+  transition: all 0.2s;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.65s ease 0.25s both;
+}
+
+.btnHome:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(38, 160, 218, 0.4);
+}
+
+/* ── Quick Links ────────────────────────────────────────── */
+.linksSection {
+  animation: fadeInUp 0.65s ease 0.3s both;
+}
+
+.linksTitle {
+  font-size: 11px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.linksGrid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 500px;
+}
+
+.linkCard {
+  display: inline-block;
+  padding: 9px 18px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.linkCard:hover {
+  background: #243044;
+  border-color: #26a0da;
+  color: #f8fafc;
+  transform: translateY(-2px);
+}

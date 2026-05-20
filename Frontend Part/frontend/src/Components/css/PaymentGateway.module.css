@@ -1,0 +1,628 @@
+/* src/Components/css/PaymentGateway.module.css */
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap");
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.45; }
+}
+
+/* ══ OVERLAY ═════════════════════════════════════════════
+   FIX: padding:0 — the old 16px padding was eating into the
+   available width and causing the modal to clip on small screens.
+   The modal itself carries margin:12px auto for breathing room.
+════════════════════════════════════════════════════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 0;           /* no padding — modal controls its own margins */
+  overflow-y: auto;
+}
+
+/* ══ MODAL ═══════════════════════════════════════════════
+   FIX: width uses calc(100% - 24px) with box-sizing:border-box
+   so it never overflows the viewport. max-width:560px is wide
+   enough to show the two-column layout clearly on tablets/desktop
+   and still collapses gracefully to single-column on phones.
+════════════════════════════════════════════════════════ */
+.modal {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 18px;
+
+  /* width calculation: viewport minus 12px breathing room on each side */
+  width: calc(100% - 24px);
+  max-width: 560px;         /* wider than before (was 480px in some versions) */
+  box-sizing: border-box;   /* border + padding count inside the stated width */
+  margin: 12px auto;        /* vertical breathing + horizontal centering */
+
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: fadeIn 0.25s ease both;
+
+  scrollbar-width: thin;
+  scrollbar-color: #334155 transparent;
+}
+
+.modal::-webkit-scrollbar       { width: 4px; }
+.modal::-webkit-scrollbar-track { background: transparent; }
+.modal::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+/* on very small phones give a touch more breathing room */
+@media (max-width: 380px) {
+  .modal {
+    width: calc(100% - 16px); /* 8px each side */
+    border-radius: 14px;
+    max-height: 88vh;
+  }
+}
+
+/* ══ HEADER ══════════════════════════════════════════════
+   FIX: min-width:0 on headerLeft so long chef names truncate
+   instead of pushing the icon off-screen. flex-shrink:0 on
+   the icon so it never collapses.
+════════════════════════════════════════════════════════ */
+.headerAdvance {
+  background: linear-gradient(135deg, #0c1a3a 0%, #0f2952 100%);
+  border-bottom: 1px solid #1d3a6e;
+  padding: 22px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.headerFinal {
+  background: linear-gradient(135deg, #052e16 0%, #064e2a 100%);
+  border-bottom: 1px solid #166534;
+  padding: 22px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.headerLeft {
+  flex: 1;
+  min-width: 0; /* allows text children to shrink + truncate */
+}
+
+.headerLabel {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.9px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.headerAmount {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 42px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  line-height: 1;
+}
+
+.headerChef {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.headerIcon {
+  font-size: 36px;
+  opacity: 0.9;
+  flex-shrink: 0; /* never let icon collapse */
+}
+
+/* ══ BODY ════════════════════════════════════════════════
+   FIX: box-sizing:border-box + width:100% so no child
+   can push outside the modal boundary.
+════════════════════════════════════════════════════════ */
+.body {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ══ ERROR BOX ═══════════════════════════════════════════ */
+.errBox {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-left: 3px solid #ef4444;
+  color: #fca5a5;
+  padding: 11px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* ══ PRICE SUMMARY ═══════════════════════════════════════ */
+.priceSummary {
+  background: #162032;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.priceSummaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #64748b;
+  padding: 2px 0;
+  gap: 8px;
+}
+
+.priceSummaryTotal {
+  color: #e2e8f0;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.priceDivider {
+  border: none;
+  border-top: 1px dashed #334155;
+  margin: 8px 0;
+}
+
+.priceDueRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 4px;
+  gap: 8px;
+}
+
+.priceDueLabelAdvance {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fb923c;
+}
+
+.priceDueLabelFinal {
+  font-size: 13px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.priceDueAmountAdvance {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 24px;
+  color: #fb923c;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.priceDueAmountFinal {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 24px;
+  color: #4ade80;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+/* ══ FIELD GROUP ═════════════════════════════════════════
+   FIX: box-sizing + min-width:0 on every field so inputs
+   never overflow their container inside flex/grid parents.
+════════════════════════════════════════════════════════ */
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.lbl {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+
+/* ══ INPUT ═══════════════════════════════════════════════
+   CRITICAL FIX: box-sizing:border-box prevents padding +
+   border from adding to the element's declared width, which
+   was the root cause of the horizontal overflow in the modal.
+════════════════════════════════════════════════════════ */
+.inp {
+  padding: 11px 14px;
+  border-radius: 9px;
+  border: 1.5px solid #334155;
+  background: #1e293b;
+  color: #f8fafc;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box; /* THE critical fix — padding inside stated width */
+  min-width: 0;           /* allows flex shrink below content size */
+  font-family: "DM Sans", sans-serif;
+  letter-spacing: 0.3px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.inp:focus {
+  border-color: #26a0da;
+  box-shadow: 0 0 0 3px rgba(38, 160, 218, 0.1);
+}
+
+.inp::placeholder {
+  color: #475569;
+}
+
+/* ══ TWO-COL (Expiry + CVV) ══════════════════════════════
+   FIX: use flex instead of grid, min-width:0 on children.
+   On very small screens, stack vertically.
+════════════════════════════════════════════════════════ */
+.twoCol {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.twoCol .fg {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 320px) {
+  .twoCol {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+/* ══ ACTION ROW ══════════════════════════════════════════ */
+.actionRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Pay button — advance (blue) */
+.btnPayAdvance {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 10px;
+  background: linear-gradient(135deg, #1565c0, #26a0da);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  box-shadow: 0 4px 18px rgba(38, 160, 218, 0.3);
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btnPayAdvance:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(38, 160, 218, 0.4);
+}
+
+/* Pay button — final (green) */
+.btnPayFinal {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 10px;
+  background: linear-gradient(135deg, #166534, #16a34a);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  box-shadow: 0 4px 18px rgba(22, 163, 74, 0.3);
+  transition: all 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btnPayFinal:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(22, 163, 74, 0.4);
+}
+
+/* Cancel button */
+.btnCancel {
+  padding: 13px 16px;
+  background: transparent;
+  border: 1.5px solid #334155;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  font-family: "DM Sans", sans-serif;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.btnCancel:hover {
+  background: #1e293b;
+  color: #94a3b8;
+  border-color: #475569;
+}
+
+.simNote {
+  font-size: 11px;
+  color: #334155;
+  text-align: center;
+  margin: 0;
+}
+
+/* ══ PROCESSING SCREEN ═══════════════════════════════════ */
+.processingWrap {
+  text-align: center;
+  padding: 52px 22px;
+}
+
+.spinner {
+  width: 52px;
+  height: 52px;
+  border: 4px solid #1e293b;
+  border-top: 4px solid #26a0da;
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+  margin: 0 auto 28px;
+}
+
+.spinnerFinal {
+  width: 52px;
+  height: 52px;
+  border: 4px solid #1e293b;
+  border-top: 4px solid #4ade80;
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+  margin: 0 auto 28px;
+}
+
+.processingTitle {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 24px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  margin: 0 0 6px;
+}
+
+.processingNote {
+  color: #475569;
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+.processingAmount {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 40px;
+  color: #26a0da;
+  letter-spacing: 1px;
+  animation: pulse 1.4s infinite;
+}
+
+.processingAmountFinal {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 40px;
+  color: #4ade80;
+  letter-spacing: 1px;
+  animation: pulse 1.4s infinite;
+}
+
+/* ══ SUCCESS SCREEN ══════════════════════════════════════ */
+.successHeader {
+  background: linear-gradient(135deg, #052e16, #064e2a);
+  border-bottom: 1px solid #166534;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.successIcon  { font-size: 54px; margin-bottom: 8px; display: block; }
+
+.successTitle {
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 28px;
+  letter-spacing: 1px;
+  color: #f8fafc;
+  margin: 0 0 6px;
+}
+
+.successSub {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+.successBody {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* ── Receipt ── */
+.receiptBox {
+  background: #162032;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.receiptTitle {
+  font-size: 10px;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.receiptGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 14px;
+}
+
+.receiptLabel {
+  font-size: 10px;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.receiptValue {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  word-break: break-all;
+}
+
+.receiptValueHighlight {
+  font-size: 14px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+.receiptDivider {
+  grid-column: 1 / -1;
+  border: none;
+  border-top: 1px dashed #334155;
+  margin: 4px 0;
+}
+
+/* ── SMS Panel ── */
+.smsPanel {
+  background: rgba(74, 222, 128, 0.05);
+  border: 1px solid rgba(74, 222, 128, 0.18);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.smsPanelTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: #4ade80;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 10px;
+}
+
+.smsTextBox {
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 7px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-family: "Courier New", monospace;
+  word-break: break-word;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.btnCopySms {
+  padding: 7px 16px;
+  background: rgba(74, 222, 128, 0.10);
+  color: #4ade80;
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  border-radius: 7px;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  transition: all 0.2s;
+}
+
+.btnCopySms:hover {
+  background: rgba(74, 222, 128, 0.18);
+}
+
+/* ── Download + Done ── */
+.btnDownload {
+  width: 100%;
+  padding: 13px;
+  background: rgba(38, 160, 218, 0.08);
+  color: #26a0da;
+  border: 1px solid rgba(38, 160, 218, 0.25);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.btnDownload:hover {
+  background: rgba(38, 160, 218, 0.15);
+}
+
+.btnDone {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #166534, #16a34a);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: "DM Sans", sans-serif;
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.25);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.btnDone:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(22, 163, 74, 0.35);
+}
